@@ -7,7 +7,7 @@ from torchvision.models import resnet18
 import copy
 from argparse import ArgumentParser
 
-parser = argparse.ArgumentParser(description="Parse the number of epochs.")
+parser = ArgumentParser(description="Parse the number of epochs.")
 parser.add_argument("--epochs", type=int, required=True, help="Number of training epochs")
 args = parser.parse_args()
 
