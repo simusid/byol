@@ -116,6 +116,8 @@ def main():
         avg_loss = epoch_loss / len(train_loader)
         print(f"Epoch {epoch+1:3d} completed: Avg Loss {avg_loss:.4f}")
     print("Training complete.")
+    print("saving model....")
+    torch.save(model.state_dict(), 'byol_o3.pth')
 
 if __name__ == "__main__":
     main()
