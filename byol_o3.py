@@ -121,8 +121,8 @@ def main(args):
             epoch_loss += loss.item()
             if batch_idx % 50 == 0:
                 print(f"Epoch {epoch+1:3d} Batch {batch_idx:4d}: Loss {loss.item():.4f}")
-            with open("byol_o3_loss.txt","a") as fh:
-                print(f"{loss.item():.4f}")
+                with open("byol_o3_loss.txt","a") as fh:
+                    fh.write(f"{loss.item():.4f}\n")
         avg_loss = epoch_loss / len(train_loader)
         print(f"Epoch {epoch+1:3d} completed: Avg Loss {avg_loss:.4f}")
     print("Training complete.")
