@@ -37,7 +37,7 @@ class ProjectionMLP(nn.Module):
             nn.Linear(input_dim, hidden_dim),
             nn.BatchNorm1d(hidden_dim),
             nn.ReLU(inplace=True),
-            nn.Linear(hidden_dim, output_dim)
+            nn.Linear(hidden_dim, output_dim))
         
     def forward(self, x):
         return self.layers(x)
@@ -49,7 +49,7 @@ class PredictionMLP(nn.Module):
             nn.Linear(input_dim, hidden_dim),
             nn.BatchNorm1d(hidden_dim),
             nn.ReLU(inplace=True),
-            nn.Linear(hidden_dim, output_dim)
+            nn.Linear(hidden_dim, output_dim))
         
     def forward(self, x):
         return self.layers(x)
@@ -86,7 +86,8 @@ class ContrastiveTransformations:
         self.n_views = n_views
 
     def __call__(self, x):
-        return [self.base_transform(x) for _ in range(self.n_views)]
+        # Return as tuple to ensure proper collation
+        return tuple([self.base_transform(x) for _ in range(self.n_views)])
 
 # Prepare CIFAR10 Dataset
 def prepare_data():
@@ -123,9 +124,10 @@ def train_byol(train_loader, online_net, target_net, optimizer, epochs, device):
         online_net.train()
         total_loss = 0.0
 
-        for views in tqdm(train_loader, desc=f'Epoch {epoch+1}/{epochs}'):
-            v1, v2 = views
-            v1, v2 = v1.to(device), v2.to(device)
+        for batch in tqdm(train_loader, desc=f'Epoch {epoch+1}/{epochs}'):
+            # Extract the views and ignore labels
+            (v1, v2), _ = batch  # Unpack the batch tuple
+            v1, v2 = v1.to(device), v2.to(device)  # Now these are tensors
 
             # Online network predictions
             q1 = online_net(v1)
