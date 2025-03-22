@@ -6,5 +6,4 @@ It treated the v1,v2 values as a list rather than tensor and was unable to execu
 o3 version worked fine out of the box with zero modifications.
 
 # training
-I noticed that deepseek script consumes 170 watts on GPU while o3 script consumes 104 watts.   
-I should also time the two of these to gauge relative performance.
+Deepseek appears to consume more power than o3.  will evaluate total runtime for each as well as backbone model used.
