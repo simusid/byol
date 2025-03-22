@@ -7,3 +7,5 @@ o3 version worked fine out of the box with zero modifications.
 
 # training
 Deepseek appears to consume more power than o3.  will evaluate total runtime for each as well as backbone model used.
+
+byol_deepseek took 104 minutes, byol_o3 took 115 minutes
