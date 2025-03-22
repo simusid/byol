@@ -5,6 +5,12 @@ import torchvision
 import torchvision.transforms as transforms
 from torchvision.models import resnet18
 import copy
+from argparse import ArgumentParser
+
+parser = argparse.ArgumentParser(description="Parse the number of epochs.")
+parser.add_argument("--epochs", type=int, required=True, help="Number of training epochs")
+args = parser.parse_args()
+
 
 class MLP(nn.Module):
     def __init__(self, in_dim, hidden_dim, out_dim):
@@ -78,7 +84,9 @@ class BYOLTransform:
         view2 = self.transform(x)
         return view1, view2
 
-def main():
+def main(args):
+
+    num_epochs= args.epochs
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     byol_transform = BYOLTransform()
     train_dataset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=byol_transform)
@@ -94,7 +102,7 @@ def main():
     model = BYOL(base_encoder=lambda: resnet18(num_classes=10), projection_dim=256, hidden_dim=4096, m=0.996)
     model = model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-    num_epochs = 100
+     
     model.train()
     for epoch in range(num_epochs):
         epoch_loss = 0.0
@@ -120,4 +128,4 @@ def main():
     torch.save(model.state_dict(), 'byol_o3.pth')
 
 if __name__ == "__main__":
-    main()
+    main(args)
