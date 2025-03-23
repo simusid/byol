@@ -14,6 +14,7 @@ def load_trained_model(model_path='byol_o3.pth', device='cpu'):
 def main():
     device = 'cpu'
     model = load_trained_model(device=device)
+    # test with random data here
     np_input = np.random.randn(1, 3, 224, 224).astype(np.float32)
     torch_input = torch.from_numpy(np_input).to(device)
     output = model(torch_input)
