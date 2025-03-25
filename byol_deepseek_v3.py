@@ -231,6 +231,8 @@ def plot_metrics():
     plt.legend()
     plt.grid(True)
     plt.show()
+    plt.savefig("deepseek_v3_loss.jpg")
+    print("figure saved")
 
 # Save the model
 torch.save(model.state_dict(), 'byol_cifar10.pth')
@@ -251,4 +253,4 @@ if __name__ == "__main__":
     test_image = test_image[0]  # Take the first view
     embedding = get_embedding(test_image)
     print(f"Embedding shape: {embedding.shape}")
-    print(f"Sample embedding values: {embedding[:10]}")  # Print first 10 values
+    print(f"Sample embedding values (only first 10 of embedding dim): {embedding[:10]}")  # Print first 10 values
