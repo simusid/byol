@@ -54,10 +54,8 @@ train_transform = BYOLTransform()
 train_dataset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=train_transform)
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
 
-test_transform = transforms.Compose([
-    transforms.ToTensor(),
-    transforms.Normalize((0.4914, 0.4822, 0.4465), (0.247, 0.243, 0.261))
-])
+# For testing, we'll create two views of each image using the same transform
+test_transform = BYOLTransform()
 test_dataset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=test_transform)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=4)
 
@@ -243,7 +241,14 @@ if __name__ == "__main__":
     plot_metrics()
     
     # Example of getting an embedding
-    image, _ = test_dataset[0]  # Get first test image
-    embedding = get_embedding(image)
+    # For the test image, we need to apply the same normalization as during training
+    test_img_transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.247, 0.243, 0.261))
+    ])
+    test_image, _ = test_dataset[0]  # Get first test image (already transformed)
+    # We need to get just one view of the image for embedding
+    test_image = test_image[0]  # Take the first view
+    embedding = get_embedding(test_image)
     print(f"Embedding shape: {embedding.shape}")
     print(f"Sample embedding values: {embedding[:10]}")  # Print first 10 values
